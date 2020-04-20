@@ -362,6 +362,16 @@ void HectorMappingRos::sysMsgCallback(const std_msgs::String& string)
     ROS_INFO("HectorSM reset");
     slamProcessor->reset();
   }
+  else if (string.data == "refresh_update_factors")
+  {
+    ros::NodeHandle private_nh_("~");
+
+    private_nh_.param("update_factor_free", p_update_factor_free_, 0.4);
+    private_nh_.param("update_factor_occupied", p_update_factor_occupied_, 0.9);
+    
+    slamProcessor->setUpdateFactorFree(p_update_factor_free_);
+    slamProcessor->setUpdateFactorOccupied(p_update_factor_occupied_); 
+  }
 }
 
 bool HectorMappingRos::mapCallback(nav_msgs::GetMap::Request  &req,
